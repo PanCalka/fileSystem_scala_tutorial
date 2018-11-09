@@ -38,6 +38,8 @@ class Directory(override val parentPath: String, override val name: String, val 
   def asDirectory: Directory = this
 
   override def getType: String = "Directory"
+
+  override def asFile: File = throw new FilesystemException("Directory is not a file")
 }
 
 object Directory {
