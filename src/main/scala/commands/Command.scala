@@ -15,6 +15,8 @@ object Command {
 
   val LS = "ls"
 
+  val PWS = "pwd"
+
   def emptyCommand : Command = (state: State) => state
 
   def incompleteCommand(name: String) : Command = (state: State) => state.setMessage(name + " incomplete command")
@@ -28,6 +30,7 @@ object Command {
       else new MkDir(tokens(1))
     }
     else if(LS.equals(tokens(0))) new Ls
+    else if(PWS.equals(tokens(0))) new Pwd
     else new UnknownCommand
   }
 }
