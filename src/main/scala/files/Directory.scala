@@ -36,6 +36,8 @@ class Directory(override val parentPath: String, override val name: String, val 
     findEntry(name) !=null
 
   def asDirectory: Directory = this
+
+  override def getType: String = "Directory"
 }
 
 object Directory {
