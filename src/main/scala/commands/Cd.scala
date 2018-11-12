@@ -8,7 +8,7 @@ class Cd(dir: String) extends Command {
 
 
 
-  def findEntry(root: Directory, absolutePath: String): DirEntry = {
+  def findEntry(root: Directory, path: String): DirEntry = {
     @tailrec
     def findEntryHelper(currentDirectry: Directory, path: List[String]): DirEntry = {
       if(path.isEmpty || path.head.isEmpty) currentDirectry
@@ -20,9 +20,23 @@ class Cd(dir: String) extends Command {
       }
     }
 
-    val tokens: List[String] = absolutePath.substring(1).split(Directory.SEPARATOR).toList
+    @tailrec
+    def collapsRelativeTokens(path: List[String], result: List[String]): List[String] = {
+      if(path.isEmpty) result
+      else if(".".equals(path.head)) collapsRelativeTokens(path.tail, result)
+      else if("..".equals(path.head)){
+        if(result.isEmpty) null
+        else collapsRelativeTokens(path.tail, result.tail)
+      }
+      else collapsRelativeTokens(path.tail, result :+ path.head)
+    }
 
-    findEntryHelper(root, tokens)
+    val tokens: List[String] = path.substring(1).split(Directory.SEPARATOR).toList
+
+    val newTokens = collapsRelativeTokens(tokens, List())
+    if (newTokens == null) null
+
+    else findEntryHelper(root, newTokens)
   }
 
   override def apply(state: State): State = {
