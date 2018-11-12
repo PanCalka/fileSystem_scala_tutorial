@@ -12,13 +12,9 @@ trait Command {
 
 object Command {
   val MKDIR = "mkdir"
-
   val LS = "ls"
-
   val PWS = "pwd"
-
   val TOUCH = "touch"
-
   val CD = "cd"
 
   def emptyCommand : Command = (state: State) => state
